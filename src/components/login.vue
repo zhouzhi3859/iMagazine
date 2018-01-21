@@ -25,7 +25,24 @@
       };
     },
     created: function() {
-      this.$toast('请先登录！');
+      // 从本地存储中取得
+      // const uidSto = plus.storage.getItem('uidSto');
+      // const usernameSto = plus.storage.getItem('usernameSto');
+      // const logoUrlSto = plus.storage.getItem('logoUrlSto');
+      // if(uidSto && !this.$store.state.user.isLogin) {
+      //   this.$store.state.user.isLogin = true;
+      //   this.$store.state.user.uid = uidSto;
+      //   this.$store.state.user.username = usernameSto;
+      //   this.$store.state.user.logoUrl = logoUrlSto;
+      //   this.$toast({
+      //     message: '自动登陆成功！',
+      //     iconClass: 'icon icon-success',
+      //     duration: 1000,
+      //   });
+      //   this.$router.push({ name: 'index', replace: true, });
+      // }else{
+      //   this.$toast('请先登录！');
+      // }
     },
     methods: {
       // 跳转到注册页面
@@ -48,13 +65,18 @@
           return that.$toast(result.msg);
         }
         const{ data, } = result;
+        
+        // 设置回本地存储
+        // plus.storage.setItem('uidSto', data.uid);
+        // plus.storage.setItem('usernameSto', data.username);
+        // plus.storage.setItem('logoUrlSto', data.logoUrl);
         that.$store.state.user.isLogin = true;
         that.$store.state.user.username = data.username;
         that.$store.state.user.uid = data.uid;
         that.$store.state.user.logoUrl = data.logoUrl;
         setTimeout(() => {
           that.$toast({
-            message: '登陆成功，即将跳转到首页！',
+            message: '登陆成功！',
             iconClass: 'icon icon-success',
             duration: 1000,
           });

@@ -16,6 +16,7 @@
     </div>
     <div class="userRel">
       <div @click="showUserPopUp"><div>个人资料</div><div><img src="../../img/font/right.png"></div></div>
+      <div @click="quiteLogin"><div>退出登陆</div><div><img src="../../img/font/right.png"></div></div>
       <div @click="showFeedback"><div>反馈</div><div><img src="../../img/font/right.png"></div></div>
       <div @click="showAppInfo"><div>关于</div><div><img src="../../img/font/right.png"></div></div>
     </div>
@@ -222,12 +223,17 @@
       };
     },
     methods: {
+      // 显示个人资料页
       showUserPopUp: function() {
         this.userPopUpVisible = true;
       },
+      
+      // 准备上传图片
       readyUploadLogo: function() {
         document.getElementById('uploadLogo').click();
       },
+      
+      // 显示时间选择器
       pickTime: function() {
         this.birthSel = this.birth;
         this.$refs.pickTime.open();
@@ -237,11 +243,15 @@
           document.querySelector('.v-modal').style.display = 'none';
         };
       },
+      
+      // 设置时间
       setBirth: function(time) {
         document.querySelector('.v-modal').style.display = 'none';
         this.$refs.pickTime.close();
         this.birth = (new Date(time).format('yyyy-MM-dd')).toString();
       },
+      
+      // 显示性别选择页
       pickSex: function() {
         this.sexPopUpVisible = true;
         
@@ -250,6 +260,8 @@
           document.querySelector('.v-modal').style.display = 'none';
         };
       },
+      
+      // 获取短信验证码
       getSmsCode: async function() {
         const phone = String(this.phone);
         if(phone.length === 0) {
@@ -275,6 +287,8 @@
           }, 1000);
         }
       },
+      
+      // 隐藏个人资料页
       hideUserPopUp: async function() {
         this.userPopUpVisible = false;
         this.username = this.$store.state.user.username;
@@ -297,6 +311,8 @@
         this.birth = data.birth;
         this.intro = data.intro;
       },
+      
+      // 确认修改个人资料
       confirmReset: async function() {
         this.logoUrl = this.logoUrlBack;
         const data = {
@@ -319,13 +335,28 @@
           this.$store.state.user.logoUrl = data.logoUrl;
         }
       },
+      
+      // 退出登陆
+      quiteLogin: function() {
+        // plus.storage.removeItem('uidSto');
+        // plus.storage.removeItem('usernameSto');
+        // plus.storage.removeItem('logoUrlSto');
+        this.$store.state.user.isLogin = false;
+        this.$router.push({ name: 'login', replace: true, });
+      },
+      
+      // 显示反馈页
       showFeedback: function() {
         this.feedbackPopUpVisible = true;
       },
+      
+      // 隐藏反馈页
       hideFeedback: function() {
         this.feedbackPopUpVisible = false;
         this.feedback = '';
       },
+      
+      // 提交反馈
       sendFeedback: async function() {
         const{ feedback, } = this;
         if(feedback.length < 5 || feedback.length > 140) {
@@ -339,19 +370,29 @@
           this.feedbackPopUpVisible = false;
         }
       },
+      
+      // 显示关于页
       showAppInfo: function() {
         this.appInfoPopUpVisible = true;
       },
+      
+      // 隐藏关于页
       hideAppInfo: function() {
         this.appInfoPopUpVisible = false;
       },
+      
+      // 显示评论记录页
       showComment: async function() {
         await this.getComment();
         this.commentVisible = true;
       },
+      
+      // 隐藏评论记录页
       hideComment: function() {
         this.commentVisible = false;
       },
+      
+      // 获得我的评论
       getComment: async function() {
         const result = await this.$ajax('/user/getCommentByUser', {
           type: 'get', data: { uid: this.$store.state.user.uid, },
@@ -361,17 +402,23 @@
         }
         this.comments = result.data;
       },
+      
+      // 显示收藏或阅读记录页
       showColOrReHr: async function(type) {
         await this.getColOrReHr(type);
         this.colOrReHrVisible = true;
       },
+      
+      // 隐藏收藏或阅读记录页
       hideColOrReHr: function() {
         this.colOrReHrVisible = false;
       },
+      
+      // 获得收藏或阅读记录
       getColOrReHr: async function(type) {
         let result = {};
         if(type === 'col') {
-          result = await this.$ajax('/user/getCollections', {
+          result = await this.$ajax('/user/getCollection', {
             type: 'get', data: { uid: this.$store.state.user.uid, },
           });
         }else{
@@ -384,6 +431,8 @@
         }
         this.colOrReHr = result.data;
       },
+      
+      // 跳转到文章页
       jumpToArticle: function(ObjId) {
         this.$router.push({ name: 'article', params: { ObjId: ObjId.substring(2), }, });
       },

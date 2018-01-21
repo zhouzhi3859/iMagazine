@@ -197,16 +197,21 @@
         if(result.code === 0) {
           setTimeout(() => {
             that.$toast({
-              message: '注册成功，即将跳转到首页！',
+              message: '注册成功，跳转到首页！',
               iconClass: 'icon icon-success',
               duration: 1000,
             });
             const{ data, } = result;
+            
+            // 设置回本地存储
+            // plus.storage.setItem('uidSto', data.uid);
+            // plus.storage.setItem('usernameSto', data.username);
+            // plus.storage.setItem('logoUrlSto', data.logoUrl);
             that.$store.state.user.isLogin = true;
             that.$store.state.user.uid = data.uid;
             that.$store.state.user.username = data.username;
             that.$store.state.user.logoUrl = data.logoUrl;
-            that.$router.push({ name: 'index', });
+            that.$router.push({ name: 'index', replace: true, });
           }, 1000);
         }
       },

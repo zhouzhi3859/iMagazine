@@ -120,10 +120,10 @@ const start = () => {
 };
 
 // 手机APP解开下面注释 PC端加上
-document.addEventListener('plusready', () => {
-  start();
-});
+// document.addEventListener('plusready', () => {
+//   start();
+// });
 
 // PC端加上下面注释 手机APP解开
-// start();
+start();
 

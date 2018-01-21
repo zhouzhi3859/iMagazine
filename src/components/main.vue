@@ -37,8 +37,10 @@
     },
     watch: {
       selected: function() {
-        if(!this.$store.state.user.isLogin && this.selected !== 'index') {
-          return this.$router.push({ name: 'login', });
+        if(!this.$store.state.user.isLogin) {
+          if(this.selected !== 'index') {
+            return this.$router.push({ name: 'login', });
+          }
         }
         this.$store.state.app.area = this.selected;
         this.$router.push({ path: this.selected, });
